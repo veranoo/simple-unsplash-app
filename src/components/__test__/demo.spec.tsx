@@ -4,7 +4,6 @@ import React from 'react';
 import Demo from '../demo';
 
 test('Demo test', () => {
-  const { getByText, debug } = render(<Demo />);
-  debug();
+  const { getByText } = render(<Demo />);
   expect(getByText('xxx')).toBeInTheDocument()
 });
