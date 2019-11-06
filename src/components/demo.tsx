@@ -13,7 +13,7 @@ const theme = {
 
 const Demo = () => (
   <ThemeProvider theme={theme}>
-    <Lorem>sdnajk</Lorem>
+    <Lorem>xxx</Lorem>
   </ThemeProvider>
 );
 
