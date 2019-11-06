@@ -1,17 +1,20 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 
 const Lorem = styled.div`
-  background: red;
+  background: ${props => props.theme.main};
+  display: inline-block;
+  padding: 20px;
 `;
 
+const theme = {
+  main: '#5373cc'
+};
+
 const Demo = () => (
-  <div>
-    Demo ajsdbh habshj jasnkjjnas jasnjknsa
-    <Lorem>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non, omnis?
-    </Lorem>
-  </div>
+  <ThemeProvider theme={theme}>
+    <Lorem>sdnajk</Lorem>
+  </ThemeProvider>
 );
 
 export default Demo;
