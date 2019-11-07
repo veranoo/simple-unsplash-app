@@ -39,11 +39,11 @@ const UnsplashProvider: React.FC = ({ children }) => {
 
     return {
       listCollections: () => {
-        return unsplashInstance.collections
-          .listCollections()
-          .then(res => res.json());
+        // return unsplashInstance.collections
+        //   .listCollections()
+        //   .then(res => res.json());
 
-        // return Promise.resolve(mockCollections);
+        return Promise.resolve(mockCollections);
       },
       getPhoto: photoId => {
         return unsplashInstance.photos

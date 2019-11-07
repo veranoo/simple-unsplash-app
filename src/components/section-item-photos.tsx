@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useUnsplahApi } from './app';
 import { useInView } from 'react-intersection-observer';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import LazyImage from './lazy-image';
 
 const BorderImageWrapper = styled.div`
@@ -33,7 +33,15 @@ const Wrapper = styled.div`
   flex-direction: column;
   min-height: 200px;
   justify-content: center;
-`
+`;
+
+const Item = memo<any>(({ urls }) => (
+  <ImageWrapper>
+    <BorderImageWrapper>
+      <LazyImage src={urls.small} alt='' />
+    </BorderImageWrapper>
+  </ImageWrapper>
+));
 
 const SectionItemPhotos = ({
   id,
@@ -43,7 +51,8 @@ const SectionItemPhotos = ({
 }) => {
   const unsplahApi = useUnsplahApi();
   const [ref, inView] = useInView({
-    threshold: 0
+    threshold: 0,
+    triggerOnce: true
   });
 
   const [visible, setVisible] = useState(false);
@@ -82,11 +91,7 @@ const SectionItemPhotos = ({
       {error && <div>Wystąpił błąd</div>}
       <PhotosWrapper>
         {photos.map(item => (
-          <ImageWrapper key={item.id}>
-            <BorderImageWrapper>
-              <LazyImage src={item.urls.small} alt='' />
-            </BorderImageWrapper>
-          </ImageWrapper>
+          <Item key={item.id} id={item.id} urls={item.urls} />
         ))}
       </PhotosWrapper>
     </Wrapper>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import styled from 'styled-components';
 
@@ -10,10 +10,13 @@ const Wrapper = styled.div`
   justify-content: center;
 `;
 
+const options = {
+  threshold: 0,
+  triggerOnce: true
+};
+
 const LazyImage = ({ src, alt = '' }) => {
-  const [ref, inView] = useInView({
-    threshold: 0
-  });
+  const [ref, inView] = useInView(options);
   const [loading, setLoading] = useState(true);
   const [lazySrc, setLazySrc] = useState('');
 
@@ -23,9 +26,9 @@ const LazyImage = ({ src, alt = '' }) => {
     }
   }, [inView, src]);
 
-  const handleLoad = () => {
+  const handleLoad = useCallback(() => {
     setLoading(false);
-  };
+  }, []);
 
   return (
     <Wrapper ref={ref}>
@@ -42,4 +45,4 @@ const LazyImage = ({ src, alt = '' }) => {
   );
 };
 
-export default LazyImage;
+export default memo(LazyImage);
