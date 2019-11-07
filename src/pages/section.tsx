@@ -35,7 +35,15 @@ const SelectWrapper = styled.div`
   align-items: center;
 `;
 
-const PhotoItem = memo<any>(({ id, urls, alt }) => {
+interface PhotoItemProps {
+  id: number;
+  urls: {
+    small: string;
+  };
+  alt?: string;
+}
+
+const PhotoItem = memo<PhotoItemProps>(({ id, urls, alt }) => {
   return (
     <ImageWrapper key={id}>
       <Link to={`/photo/${id}`}>
@@ -49,7 +57,7 @@ const INITIAL_PAGE = 1;
 const PHOTOS_PER_PAGE = 10;
 const INITIAL_ORDER_BY = 'latest';
 
-export const Section: React.FC<RouteComponentProps<any>> = props => {
+export const Section: React.FC<RouteComponentProps<{ id: string }>> = props => {
   const unsplashApi = useUnsplashApi();
   const params = useRef({
     page: INITIAL_PAGE,
@@ -66,7 +74,7 @@ export const Section: React.FC<RouteComponentProps<any>> = props => {
   const fetchCollections = useCallback(() => {
     unsplashApi
       .getCollectionPhotos(
-        props.match.params.id,
+        Number(props.match.params.id),
         params.current.page,
         params.current.perPage,
         params.current.orderBy
@@ -88,7 +96,7 @@ export const Section: React.FC<RouteComponentProps<any>> = props => {
 
     unsplashApi
       .getCollectionPhotos(
-        props.match.params.id,
+        Number(props.match.params.id),
         params.current.page,
         params.current.perPage,
         params.current.orderBy

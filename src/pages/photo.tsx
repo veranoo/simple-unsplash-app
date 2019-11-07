@@ -14,7 +14,7 @@ const Column = styled.div`
   width: 50%;
 `;
 
-export const Photo: React.FC<RouteComponentProps<any>> = props => {
+export const Photo: React.FC<RouteComponentProps<{ id: string }>> = props => {
   const unsplashApi = useUnsplashApi();
   const [photo, setPhoto] = useState(null);
   const [error, setError] = useState(false);

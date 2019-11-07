@@ -35,7 +35,13 @@ const Wrapper = styled.div`
   justify-content: center;
 `;
 
-const Item = memo<any>(({ urls }) => (
+interface ItemProps {
+  urls: {
+    small: string;
+  };
+}
+
+const Item = memo<ItemProps>(({ urls }) => (
   <ImageWrapper>
     <BorderImageWrapper>
       <LazyImage src={urls.small} alt='' />
@@ -91,7 +97,7 @@ const SectionItemPhotos = ({
       {error && <div>Wystąpił błąd</div>}
       <PhotosWrapper>
         {photos.map(item => (
-          <Item key={item.id} id={item.id} urls={item.urls} />
+          <Item key={item.id} urls={item.urls} />
         ))}
       </PhotosWrapper>
     </Wrapper>
