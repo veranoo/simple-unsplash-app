@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState
+} from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { useUnsplahApi } from '../components/app';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -27,36 +34,90 @@ const SelectWrapper = styled.div`
   align-items: center;
 `;
 
+const PhotoItem = memo<any>(({ id, urls, alt }) => {
+  console.log('PhotoItem:render' + id);
+  return (
+    <ImageWrapper key={id}>
+      <Link to={`/photo/${id}`}>
+        <PhotoImage id={id} src={urls.small} alt={alt} />
+      </Link>
+    </ImageWrapper>
+  );
+});
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'SET_ERROR':
+      return {
+        ...state,
+        hasMore: false,
+        error: true,
+        photos: []
+      };
+
+    case 'SET_PHOTOS':
+      return {
+        ...state,
+        photos: action.payload.photos,
+        hasMore: true
+      };
+
+    case 'SET_LOAD_MORE':
+      return {
+        ...state,
+        photos: [...state.photos, ...action.payload.photos],
+        hasMore: true
+      };
+
+    case 'SET_NOT_LOAD_MORE':
+      return {
+        ...state,
+        hasMore: false
+      };
+
+    case 'SET_LOAD_MORE_ERROR':
+      return {
+        ...state,
+        error: true,
+        hasMore: false
+      };
+  }
+};
+
 export const Section: React.FC<RouteComponentProps<any>> = props => {
   const unsplashApi = useUnsplahApi();
   const params = useRef({
     page: 1,
-    perPage: 10
+    perPage: 10,
+    orderBy: 'latest'
   });
-  const [photos, setPhotos] = useState([]);
-  const [hasMore, setHasMore] = useState(false);
-  const [orderBy, setOrderBy] = useState('latest');
-  const [error, setError] = useState(false);
   const ref = useRef();
 
-  useEffect(() => {
+  const [state, dispatch] = useReducer(reducer, {
+    photos: [],
+    hasMore: false,
+    error: false
+  });
+
+  const fetchCollections = useCallback(() => {
     unsplashApi
       .getCollectionPhotos(
         props.match.params.id,
         params.current.page,
         params.current.perPage,
-        orderBy
+        params.current.orderBy
       )
       .then(response => {
-        setHasMore(true);
-        setPhotos(response);
+        dispatch({ type: 'SET_PHOTOS', payload: { photos: response } });
       })
       .catch(() => {
-        setHasMore(false);
-        setError(true);
-        setPhotos([]);
+        dispatch({ type: 'SET_ERROR' });
       });
-  }, [orderBy]);
+  }, []);
+
+  useEffect(() => {
+    fetchCollections();
+  }, []);
 
   const loadMore = useCallback(() => {
     params.current = {
@@ -69,23 +130,24 @@ export const Section: React.FC<RouteComponentProps<any>> = props => {
         props.match.params.id,
         params.current.page,
         params.current.perPage,
-        orderBy
+        params.current.orderBy
       )
       .then(response => {
         if (!response.length) {
-          setHasMore(false);
+          dispatch({ type: 'SET_NOT_LOAD_MORE' });
           return;
         }
-        setPhotos(photos => [...photos, ...response]);
+
+        dispatch({ type: 'SET_LOAD_MORE', payload: { photos: response } });
       })
       .catch(() => {
-        setError(true);
-        setHasMore(false);
+        dispatch({ type: 'SET_LOAD_MORE_ERROR' });
       });
-  }, [orderBy]);
+  }, []);
 
   const handleChangeOrder = useCallback(evt => {
-    setOrderBy(evt.target.value);
+    params.current.orderBy = evt.target.value;
+    fetchCollections();
   }, []);
 
   return (
@@ -99,22 +161,16 @@ export const Section: React.FC<RouteComponentProps<any>> = props => {
       <Container>
         <InfiniteScroll
           loadMore={loadMore}
-          hasMore={hasMore}
+          hasMore={state.hasMore}
           loader={<div key='loading'>Loading..</div>}
         >
           <ImagesWrapper ref={ref} key={0}>
-            {photos.map(item => {
-              return (
-                <ImageWrapper key={item.id}>
-                  <Link to={`/photo/${item.id}`}>
-                    <PhotoImage id={item.id} src={item.urls.small} alt='' />
-                  </Link>
-                </ImageWrapper>
-              );
+            {state.photos.map(item => {
+              return <PhotoItem key={item.id} id={item.id} urls={item.urls} />;
             })}
           </ImagesWrapper>
         </InfiniteScroll>
-        {error && <div>Wystąpił błąd</div>}
+        {state.error && <div key='error'>Wystąpił błąd</div>}
       </Container>
     </Layout>
   );

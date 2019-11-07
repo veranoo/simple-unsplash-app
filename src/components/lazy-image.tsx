@@ -18,7 +18,7 @@ const LazyImage = ({ src, alt = '' }) => {
   const [lazySrc, setLazySrc] = useState('');
 
   useEffect(() => {
-    if (inView) {
+    if (!lazySrc && inView) {
       setLazySrc(src);
     }
   }, [inView, src]);

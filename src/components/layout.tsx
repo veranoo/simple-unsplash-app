@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 
 const LayoutWrapper = styled.div`
@@ -17,8 +17,8 @@ const Nav = styled.nav`
   z-index: 10;
 `;
 
-export const Layout: React.FC = ({ children }) => (
-  <LayoutWrapper>
+const Navbar = memo(() => {
+  return (
     <Nav>
       <Link to='/'>
         <img
@@ -28,6 +28,12 @@ export const Layout: React.FC = ({ children }) => (
         />
       </Link>
     </Nav>
+  );
+});
+
+export const Layout: React.FC = ({ children }) => (
+  <LayoutWrapper>
+    <Navbar />
     {children}
   </LayoutWrapper>
 );
