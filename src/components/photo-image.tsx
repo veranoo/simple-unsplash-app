@@ -42,7 +42,7 @@ export const PhotoImage = ({ src, alt, id }) => {
       setDownloads(response.downloads);
       setLocation(response.location.city);
     });
-  }, []);
+  }, [downloads]);
 
   return (
     <BorderImageWrapper onMouseEnter={handleMouseEnter}>

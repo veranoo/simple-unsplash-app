@@ -29,7 +29,15 @@ const LazyImage = ({ src, alt = '' }) => {
 
   return (
     <Wrapper ref={ref}>
-      <img width={'100%'} onLoad={handleLoad} src={lazySrc} alt={alt} />
+      <img
+        style={{
+          display: loading ? 'none' : 'block'
+        }}
+        width={'100%'}
+        onLoad={handleLoad}
+        src={lazySrc}
+        alt={alt}
+      />
     </Wrapper>
   );
 };

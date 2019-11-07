@@ -30,21 +30,25 @@ export const Home = () => {
   const unsplahApi = useUnsplahApi();
 
   const [collections, setCollections] = useState([]);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    console.log(unsplahApi);
-    unsplahApi.listCollections().then(response => {
-      console.log(response);
-      setCollections(
-        response.map(item => {
-          return {
-            id: item.id,
-            preview_photos: item.preview_photos,
-            title: item.title
-          };
-        })
-      );
-    });
+    unsplahApi
+      .listCollections()
+      .then(response => {
+        setCollections(
+          response.map(item => {
+            return {
+              id: item.id,
+              preview_photos: item.preview_photos,
+              title: item.title
+            };
+          })
+        );
+      })
+      .catch(() => {
+        setError(true);
+      });
   }, []);
 
   return (
@@ -59,6 +63,7 @@ export const Home = () => {
           </Container>
         </SectionWrapper>
       ))}
+      {error && <Container>Wystąpił błąd</Container>}
     </Layout>
   );
 };

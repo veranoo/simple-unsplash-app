@@ -34,6 +34,7 @@ export const Section: React.FC<RouteComponentProps<any>> = props => {
     perPage: 10
   });
   const [photos, setPhotos] = useState([]);
+  const [hasMore, setHasMore] = useState(false);
   const [orderBy, setOrderBy] = useState('latest');
   const [error, setError] = useState(false);
   const ref = useRef();
@@ -47,10 +48,13 @@ export const Section: React.FC<RouteComponentProps<any>> = props => {
         orderBy
       )
       .then(response => {
+        setHasMore(true);
         setPhotos(response);
       })
       .catch(() => {
+        setHasMore(false);
         setError(true);
+        setPhotos([]);
       });
   }, [orderBy]);
 
@@ -68,10 +72,15 @@ export const Section: React.FC<RouteComponentProps<any>> = props => {
         orderBy
       )
       .then(response => {
+        if (!response.length) {
+          setHasMore(false);
+          return;
+        }
         setPhotos(photos => [...photos, ...response]);
       })
       .catch(() => {
         setError(true);
+        setHasMore(false);
       });
   }, [orderBy]);
 
@@ -89,20 +98,11 @@ export const Section: React.FC<RouteComponentProps<any>> = props => {
       </SelectWrapper>
       <Container>
         <InfiniteScroll
-          pageStart={0}
           loadMore={loadMore}
-          hasMore={true}
-          loader={
-            error ? (
-              <div>Wystąpił błąd</div>
-            ) : (
-              <div className='loader' key={0}>
-                Loading ...
-              </div>
-            )
-          }
+          hasMore={hasMore}
+          loader={<div key='loading'>Loading..</div>}
         >
-          <ImagesWrapper ref={ref}>
+          <ImagesWrapper ref={ref} key={0}>
             {photos.map(item => {
               return (
                 <ImageWrapper key={item.id}>
@@ -114,6 +114,7 @@ export const Section: React.FC<RouteComponentProps<any>> = props => {
             })}
           </ImagesWrapper>
         </InfiniteScroll>
+        {error && <div>Wystąpił błąd</div>}
       </Container>
     </Layout>
   );

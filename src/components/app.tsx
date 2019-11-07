@@ -16,7 +16,6 @@ const GlobalStyle = createGlobalStyle`
 
 interface UnsplashProviderInterface {
   listCollections(): Promise<any[]>;
-  listRelatedCollections(collectionId: number): Promise<any>;
   getPhoto(photoId: string): Promise<any>;
   getCollectionPhotos(
     collectionId: number,
@@ -40,11 +39,11 @@ const UnsplashProvider: React.FC = ({ children }) => {
 
     return {
       listCollections: () => {
-        // return unsplashInstance.collecions.listCollections.then(res =>
-        //   res.json()
-        // );
+        return unsplashInstance.collections
+          .listCollections()
+          .then(res => res.json());
 
-        return Promise.resolve(mockCollections);
+        // return Promise.resolve(mockCollections);
       },
       getPhoto: photoId => {
         return unsplashInstance.photos
@@ -54,11 +53,6 @@ const UnsplashProvider: React.FC = ({ children }) => {
       getCollectionPhotos: (...args) => {
         return unsplashInstance.collections
           .getCollectionPhotos(...args)
-          .then(res => res.json());
-      },
-      listRelatedCollections: collectionId => {
-        return unsplashInstance.collections
-          .listRelatedCollections(collectionId)
           .then(res => res.json());
       }
     };
