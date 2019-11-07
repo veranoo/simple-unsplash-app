@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import mockCollections from '../../mocks/collections.json';
 import Unsplash from 'unsplash-js';
 
 interface UnsplashProviderInterface {
@@ -21,15 +20,11 @@ export const UnsplashProvider: React.FC = ({ children }) => {
       accessKey: process.env.ACCES_KEY
     });
 
-    console.log(unsplashInstance);
-
     return {
       listCollections: () => {
-        // return unsplashInstance.collections
-        //   .listCollections()
-        //   .then(res => res.json());
-
-        return Promise.resolve(mockCollections);
+        return unsplashInstance.collections
+          .listCollections()
+          .then(res => res.json());
       },
       getPhoto: photoId => {
         return unsplashInstance.photos
