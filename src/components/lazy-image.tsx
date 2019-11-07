@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  width: 100%;
+  display: flex;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+`;
 
 const LazyImage = ({ src, alt = '' }) => {
   const [ref, inView] = useInView({
@@ -19,10 +28,9 @@ const LazyImage = ({ src, alt = '' }) => {
   };
 
   return (
-    <div ref={ref} style={{ display: 'inline-block' }}>
-      {loading && <div>Loader</div>}
-      <img onLoad={handleLoad} src={lazySrc} alt={alt} />
-    </div>
+    <Wrapper ref={ref}>
+      <img width={'100%'} onLoad={handleLoad} src={lazySrc} alt={alt} />
+    </Wrapper>
   );
 };
 

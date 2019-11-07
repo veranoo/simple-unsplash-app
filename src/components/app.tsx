@@ -1,12 +1,18 @@
 import React, { useContext, useMemo } from 'react';
 import { Reset } from 'styled-reset';
-import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
-// ES Modules syntax
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Unsplash from 'unsplash-js';
 import { Photo } from '../pages/photo';
-import { Sections } from '../pages/sections';
+import { Home } from '../pages/home';
 import { Section } from '../pages/section';
 import mockCollections from '../../mocks/collections.json';
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family: Arial,sans-serif ;
+  }
+`;
 
 interface UnsplashProviderInterface {
   listCollections(): Promise<any[]>;
@@ -69,17 +75,13 @@ const App: React.FC = () => {
   return (
     <UnsplashProvider>
       <Reset />
+      <GlobalStyle />
       <Router>
-        <div>
-          <nav>
-            <Link to='/'>Home</Link>
-          </nav>
-          <Switch>
-            <Route path='/photo/:id?' component={Photo} />
-            <Route path='/section/:id?' component={Section} />
-            <Route path='/' component={Sections} />
-          </Switch>
-        </div>
+        <Switch>
+          <Route path='/photo/:id?' component={Photo} />
+          <Route path='/section/:id?' component={Section} />
+          <Route path='/' component={Home} />
+        </Switch>
       </Router>
     </UnsplashProvider>
   );

@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { useUnsplahApi } from '../components/app';
-import LazyImage from '../components/image';
+import LazyImage from '../components/lazy-image';
+import { Layout } from '../components/layout';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  display: flex;
+`;
+
+const Column = styled.div`
+  width: 50%;
+`;
 
 export const Photo: React.FC<RouteComponentProps<any>> = props => {
   const unsplashApi = useUnsplahApi();
@@ -14,8 +24,19 @@ export const Photo: React.FC<RouteComponentProps<any>> = props => {
   }, []);
 
   return (
-    <div>
-      {photo && <LazyImage src={photo.urls.regular} alt={photo.alt_description} />}
-    </div>
+    <Layout>
+      <Wrapper>
+        {photo && (
+          <Column>
+            <LazyImage src={photo.urls.regular} alt={photo.alt_description} />
+          </Column>
+        )}
+        {photo && (
+          <Column>
+            <div>{photo.name}</div>
+          </Column>
+        )}
+      </Wrapper>
+    </Layout>
   );
 };

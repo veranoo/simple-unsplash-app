@@ -3,19 +3,29 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { useUnsplahApi } from '../components/app';
 import InfiniteScroll from 'react-infinite-scroller';
 
-import Masonry from 'react-masonry-component';
-import LazyImage from '../components/image';
+import styled from 'styled-components';
+import { PhotoImage } from '../components/photo-image';
+import { Layout } from '../components/layout';
+import Container from '../components/container';
 
-const Gallery: React.FC = ({ children }) => (
-  <Masonry
-    className={'my-gallery-class'} // default ''
-    elementType={'ul'} // default 'div'
-    disableImagesLoaded={false} // default false
-    updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
-  >
-    {children}
-  </Masonry>
-);
+const ImagesWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`;
+
+const ImageWrapper = styled.div`
+  width: 22%;
+  margin: 10px 0;
+  position: relative;
+`;
+
+const SelectWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  height: 50px;
+  align-items: center;
+`;
 
 export const Section: React.FC<RouteComponentProps<any>> = props => {
   const unsplashApi = useUnsplahApi();
@@ -59,6 +69,9 @@ export const Section: React.FC<RouteComponentProps<any>> = props => {
       )
       .then(response => {
         setPhotos(photos => [...photos, ...response]);
+      })
+      .catch(() => {
+        setError(true);
       });
   }, [orderBy]);
 
@@ -67,39 +80,41 @@ export const Section: React.FC<RouteComponentProps<any>> = props => {
   }, []);
 
   return (
-    <div>
-      <select onChange={handleChangeOrder}>
-        <option value='latest'>Najnowsze</option>
-        <option value='popular'>Popularne</option>
-      </select>
-      <InfiniteScroll
-        pageStart={0}
-        loadMore={loadMore}
-        hasMore={true}
-        loader={
-          error ? (
-            <div>Wystąpił błąd</div>
-          ) : (
-            <div className='loader' key={0}>
-              Loading ...
-            </div>
-          )
-        }
-      >
-        <div ref={ref}>
-          <Gallery>
+    <Layout>
+      <SelectWrapper>
+        <select onChange={handleChangeOrder}>
+          <option value='latest'>Najnowsze</option>
+          <option value='popular'>Popularne</option>
+        </select>
+      </SelectWrapper>
+      <Container>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={loadMore}
+          hasMore={true}
+          loader={
+            error ? (
+              <div>Wystąpił błąd</div>
+            ) : (
+              <div className='loader' key={0}>
+                Loading ...
+              </div>
+            )
+          }
+        >
+          <ImagesWrapper ref={ref}>
             {photos.map(item => {
               return (
-                <Link to={`/photo/${item.id}`} key={item.id}>
-                  <div style={{ padding: 20 }}>
-                    <LazyImage src={item.urls.small} alt='' />
-                  </div>
-                </Link>
+                <ImageWrapper key={item.id}>
+                  <Link to={`/photo/${item.id}`}>
+                    <PhotoImage id={item.id} src={item.urls.small} alt='' />
+                  </Link>
+                </ImageWrapper>
               );
             })}
-          </Gallery>
-        </div>
-      </InfiniteScroll>
-    </div>
+          </ImagesWrapper>
+        </InfiniteScroll>
+      </Container>
+    </Layout>
   );
 };
