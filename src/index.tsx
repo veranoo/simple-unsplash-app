@@ -4,7 +4,7 @@ import App from './components/app';
 
 const rootElement = document.querySelector('.app');
 
-const render = (Component: any) => {
+const render = (Component: React.FC) => {
   ReactDOM.render(<Component />, rootElement);
 };
 
