@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
-import { useUnsplahApi } from '../components/app';
 import LazyImage from '../components/lazy-image';
 import { Layout } from '../components/layout';
 import styled from 'styled-components';
 import Container from '../components/container';
+import { useUnsplashApi } from '../hooks/use-unsplash-api';
 
 const Wrapper = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ const Column = styled.div`
 `;
 
 export const Photo: React.FC<RouteComponentProps<any>> = props => {
-  const unsplashApi = useUnsplahApi();
+  const unsplashApi = useUnsplashApi();
   const [photo, setPhoto] = useState(null);
   const [error, setError] = useState(false);
 

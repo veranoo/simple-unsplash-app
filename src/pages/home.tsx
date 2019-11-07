@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useUnsplahApi } from '../components/app';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import SectionItemPhotos from '../components/section-item-photos';
 import { Layout } from '../components/layout';
 import Container from '../components/container';
+import { useUnsplashApi } from '../hooks/use-unsplash-api';
 
 const SectionWrapper = styled.div`
   display: flex;
@@ -27,7 +27,7 @@ const Title = styled.div`
 `;
 
 export const Home = () => {
-  const unsplahApi = useUnsplahApi();
+  const unsplahApi = useUnsplashApi();
 
   const [collections, setCollections] = useState([]);
   const [error, setError] = useState(false);

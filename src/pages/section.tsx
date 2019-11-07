@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useEffect, useReducer, useRef } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { useUnsplahApi } from '../components/app';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import styled from 'styled-components';
@@ -15,6 +14,7 @@ import {
   SET_NOT_LOAD_MORE,
   SET_PHOTOS
 } from '../reducers/section-reducer';
+import { useUnsplashApi } from '../hooks/use-unsplash-api';
 
 const ImagesWrapper = styled.div`
   display: flex;
@@ -50,7 +50,7 @@ const PHOTOS_PER_PAGE = 10;
 const INITIAL_ORDER_BY = 'latest';
 
 export const Section: React.FC<RouteComponentProps<any>> = props => {
-  const unsplashApi = useUnsplahApi();
+  const unsplashApi = useUnsplashApi();
   const params = useRef({
     page: INITIAL_PAGE,
     perPage: PHOTOS_PER_PAGE,

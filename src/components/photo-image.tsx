@@ -1,7 +1,7 @@
-import { useUnsplahApi } from './app';
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import LazyImage from './lazy-image';
+import { useUnsplashApi } from '../hooks/use-unsplash-api';
 
 const Description = styled.div`
   position: absolute;
@@ -30,7 +30,7 @@ const BorderImageWrapper = styled.div`
 `;
 
 export const PhotoImage = ({ src, alt, id }) => {
-  const unsplashApi = useUnsplahApi();
+  const unsplashApi = useUnsplashApi();
   const [downloads, setDownloads] = useState(null);
   const [location, setLocation] = useState(null);
 

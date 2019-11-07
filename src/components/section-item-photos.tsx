@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { useUnsplahApi } from './app';
 import { useInView } from 'react-intersection-observer';
 import React, { memo, useEffect, useState } from 'react';
 import LazyImage from './lazy-image';
+import { useUnsplashApi } from '../hooks/use-unsplash-api';
 
 const BorderImageWrapper = styled.div`
   padding: 5px;
@@ -49,7 +49,7 @@ const SectionItemPhotos = ({
   perPage = 10,
   page = 1
 }) => {
-  const unsplahApi = useUnsplahApi();
+  const unsplahApi = useUnsplashApi();
   const [ref, inView] = useInView({
     threshold: 0,
     triggerOnce: true
