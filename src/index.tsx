@@ -4,6 +4,13 @@ import App from './components/app';
 
 const rootElement = document.querySelector('.app');
 
+window['FB'].init({
+  appId: '1435646576649598',
+  status: true,
+  xfbml: true,
+  version: 'v2.7' // or v2.6, v2.5, v2.4, v2.3
+});
+
 const render = (Component: React.FC) => {
   ReactDOM.render(<Component />, rootElement);
 };

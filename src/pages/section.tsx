@@ -45,7 +45,7 @@ interface PhotoItemProps {
 
 const PhotoItem = memo<PhotoItemProps>(({ id, urls, alt }) => {
   return (
-    <ImageWrapper key={id}>
+    <ImageWrapper key={id} className='image'>
       <Link to={`/photo/${id}`}>
         <PhotoImage id={id} src={urls.small} alt={alt} />
       </Link>
@@ -58,6 +58,7 @@ const PHOTOS_PER_PAGE = 10;
 const INITIAL_ORDER_BY = 'latest';
 
 export const Section: React.FC<RouteComponentProps<{ id: string }>> = props => {
+  console.log(props);
   const unsplashApi = useUnsplashApi();
   const params = useRef({
     page: INITIAL_PAGE,

@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render Section page when success 1`] = `
+<div>
+  <div
+    class="sc-bxivhb glCqXO"
+  >
+    <nav
+      class="sc-ifAKCX bHTZJD"
+    >
+      <a
+        href="/"
+      >
+        <img
+          alt=""
+          src="http://assets.stickpng.com/thumbs/5cb4839d5f1b6d3fbadece7c.png"
+          width="80px"
+        />
+      </a>
+    </nav>
+    <div
+      class="sc-htoDjs bIJLve"
+    >
+      <select>
+        <option
+          value="latest"
+        >
+          Najnowsze
+        </option>
+        <option
+          value="popular"
+        >
+          Popularne
+        </option>
+      </select>
+    </div>
+    <div
+      class="sc-EHOje jtMLyu"
+    >
+      <div>
+        <div
+          class="sc-bZQynM haTaOE"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
