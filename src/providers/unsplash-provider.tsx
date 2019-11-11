@@ -4,6 +4,7 @@ import Unsplash from 'unsplash-js';
 interface UnsplashProviderInterface {
   listCollections(): Promise<any[]>;
   getPhoto(photoId: string): Promise<any>;
+  abort(): void;
   getCollectionPhotos(
     collectionId: number,
     page: number,
@@ -12,15 +13,33 @@ interface UnsplashProviderInterface {
   ): Promise<any>;
 }
 
-export const UnsplashContext = React.createContext<UnsplashProviderInterface>(null);
+export const UnsplashContext = React.createContext<UnsplashProviderInterface>(
+  null
+);
+
+const copyFetch = window.fetch;
 
 export const UnsplashProvider: React.FC = ({ children }) => {
   const unsplash = useMemo(() => {
     const unsplashInstance = new Unsplash({
-      accessKey: process.env.ACCES_KEY
+      accessKey: process.env.ACCESS_KEY
     });
 
+    let controller = new AbortController();
+    let signal = controller.signal;
+    window.fetch = (input, options) => {
+      return copyFetch(input, {
+        ...options,
+        signal
+      });
+    };
+
     return {
+      abort: () => {
+        controller.abort();
+        controller = new AbortController();
+        signal = controller.signal;
+      },
       listCollections: () => {
         return unsplashInstance.collections
           .listCollections()
@@ -31,10 +50,16 @@ export const UnsplashProvider: React.FC = ({ children }) => {
           .getPhoto(photoId)
           .then(res => res.json());
       },
-      getCollectionPhotos: (...args) => {
-        return unsplashInstance.collections
+      getCollectionPhotos: async (...args) => {
+        const response = await unsplashInstance.collections
           .getCollectionPhotos(...args)
           .then(res => res.json());
+
+        if (response.errors) {
+          throw new Error();
+        }
+
+        return response;
       }
     };
   }, []);

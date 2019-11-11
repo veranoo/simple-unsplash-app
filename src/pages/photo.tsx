@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 import LazyImage from '../components/lazy-image';
 import { Layout } from '../components/layout';
@@ -27,6 +27,7 @@ export const Photo: React.FC<RouteComponentProps<{ id: string }>> = props => {
   const unsplashApi = useUnsplashApi();
   const [photo, setPhoto] = useState(null);
   const [error, setError] = useState(false);
+  const ref = useRef();
 
   useEffect(() => {
     unsplashApi
@@ -35,8 +36,15 @@ export const Photo: React.FC<RouteComponentProps<{ id: string }>> = props => {
         setPhoto(response);
       })
       .catch(() => {
+        if (!ref.current) {
+          return;
+        }
         setError(true);
       });
+
+    return () => {
+      unsplashApi.abort();
+    };
   }, []);
 
   const handleClickShare = () => {
@@ -47,27 +55,34 @@ export const Photo: React.FC<RouteComponentProps<{ id: string }>> = props => {
   };
 
   return (
-    <Layout>
-      <Container>
-        {photo && (
-          <Wrapper>
-            <Column>
-              <LazyImage src={photo.urls.regular} alt={photo.alt_description} />
-            </Column>
-            <Column>
-              {photo.description && <div>Opis: {photo.description}</div>}
-              {photo.likes && <div>Ilość polubień: {photo.likes}</div>}
-              {(photo.exif.make || photo.exif.model) && (
-                <div>
-                  Model aparatu: {photo.exif.make} {photo.exif.model}
-                </div>
-              )}
-              <Button onClick={handleClickShare}>Udostępnij na facebooku</Button>
-            </Column>
-          </Wrapper>
-        )}
-        {error && <div>Wyśtąpił błąd</div>}
-      </Container>
-    </Layout>
+    <div ref={ref}>
+      <Layout>
+        <Container>
+          {photo && (
+            <Wrapper>
+              <Column>
+                <LazyImage
+                  src={photo.urls.regular}
+                  alt={photo.alt_description}
+                />
+              </Column>
+              <Column>
+                {photo.description && <div>Opis: {photo.description}</div>}
+                {photo.likes && <div>Ilość polubień: {photo.likes}</div>}
+                {(photo.exif.make || photo.exif.model) && (
+                  <div>
+                    Model aparatu: {photo.exif.make} {photo.exif.model}
+                  </div>
+                )}
+                <Button onClick={handleClickShare}>
+                  Udostępnij na facebooku
+                </Button>
+              </Column>
+            </Wrapper>
+          )}
+          {error && <div>Wyśtąpił błąd</div>}
+        </Container>
+      </Layout>
+    </div>
   );
 };

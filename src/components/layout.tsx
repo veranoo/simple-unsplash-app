@@ -31,8 +31,8 @@ const Navbar = memo(() => {
   );
 });
 
-export const Layout: React.FC = ({ children }) => (
-  <LayoutWrapper>
+export const Layout: React.FC<{ ref?: any }> = ({ children, ref }) => (
+  <LayoutWrapper ref={ref}>
     <Navbar />
     {children}
   </LayoutWrapper>

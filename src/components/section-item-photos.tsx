@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useInView } from 'react-intersection-observer';
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import LazyImage from './lazy-image';
 import { useUnsplashApi } from '../hooks/use-unsplash-api';
 
@@ -65,6 +65,7 @@ const SectionItemPhotos = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [photos, setPhotos] = useState([]);
+  const domRef = useRef<any>();
 
   useEffect(() => {
     if (inView) {
@@ -82,17 +83,28 @@ const SectionItemPhotos = ({
       .then(response => {
         setPhotos(response);
         setError(false);
+        setLoading(false);
       })
       .catch(() => {
+        if (!domRef.current) {
+          return;
+        }
         setError(true);
-      })
-      .finally(() => {
         setLoading(false);
       });
+
+    return () => {
+      unsplahApi.abort();
+    };
   }, [visible]);
 
+  const refDom = useCallback(dom => {
+    ref(dom);
+    domRef.current = dom;
+  }, []);
+
   return (
-    <Wrapper ref={ref}>
+    <Wrapper ref={refDom}>
       {loading && <div>Trwa ładowanie...</div>}
       {error && <div>Wystąpił błąd</div>}
       <PhotosWrapper>

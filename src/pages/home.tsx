@@ -46,9 +46,14 @@ export const Home = () => {
           })
         );
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         setError(true);
       });
+
+    return () => {
+      unsplahApi.abort();
+    }
   }, []);
 
   return (

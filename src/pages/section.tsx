@@ -58,13 +58,14 @@ const PHOTOS_PER_PAGE = 10;
 const INITIAL_ORDER_BY = 'latest';
 
 export const Section: React.FC<RouteComponentProps<{ id: string }>> = props => {
-  console.log(props);
   const unsplashApi = useUnsplashApi();
   const params = useRef({
     page: INITIAL_PAGE,
     perPage: PHOTOS_PER_PAGE,
     orderBy: INITIAL_ORDER_BY
   });
+
+  const ref = useRef();
 
   const [state, dispatch] = useReducer(sectionReducer, {
     photos: [],
@@ -84,12 +85,19 @@ export const Section: React.FC<RouteComponentProps<{ id: string }>> = props => {
         dispatch({ type: SET_PHOTOS, payload: { photos: response } });
       })
       .catch(() => {
+        if (!ref.current) {
+          return;
+        }
         dispatch({ type: SET_ERROR });
       });
   }, []);
 
   useEffect(() => {
     fetchCollections();
+
+    return () => {
+      unsplashApi.abort();
+    }
   }, []);
 
   const loadMore = useCallback(() => {
@@ -111,6 +119,9 @@ export const Section: React.FC<RouteComponentProps<{ id: string }>> = props => {
         dispatch({ type: SET_LOAD_MORE, payload: { photos: response } });
       })
       .catch(() => {
+        if (!ref.current) {
+          return;
+        }
         dispatch({ type: SET_LOAD_MORE_ERROR });
       });
   }, []);
@@ -130,7 +141,7 @@ export const Section: React.FC<RouteComponentProps<{ id: string }>> = props => {
 
   return (
     <Layout>
-      <SelectWrapper>
+      <SelectWrapper ref={ref}>
         <select onChange={handleChangeOrder}>
           <option value='latest'>Najnowsze</option>
           <option value='popular'>Popularne</option>
