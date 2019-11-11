@@ -1,8 +1,8 @@
 import { render, wait, fireEvent } from '@testing-library/react';
 import { UnsplashContext } from '../../providers/unsplash-provider';
 import React from 'react';
-import collections from '../../../mocks/collections.json';
-import photos from '../../../mocks/photos.json';
+import collections from '../../../__mock__/collections.json';
+import photos from '../../../__mock__/photos.json';
 import { Section } from '../section';
 import { BrowserRouter } from 'react-router-dom';
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';

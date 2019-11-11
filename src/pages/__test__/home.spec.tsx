@@ -3,8 +3,8 @@ import { render, wait } from '@testing-library/react';
 import { Home } from '../home';
 import { BrowserRouter } from 'react-router-dom';
 import { UnsplashContext } from '../../providers/unsplash-provider';
-import collections from '../../../mocks/collections.json';
-import photos from '../../../mocks/photos.json';
+import collections from '../../../__mock__/collections.json';
+import photos from '../../../__mock__/photos.json';
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils'
 
 test('should render Home page when success', async () => {
