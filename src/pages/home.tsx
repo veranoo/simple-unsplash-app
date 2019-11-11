@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import SectionItemPhotos from '../components/section-item-photos';
@@ -31,6 +31,7 @@ export const Home = () => {
 
   const [collections, setCollections] = useState([]);
   const [error, setError] = useState(false);
+  const ref = useRef();
 
   useEffect(() => {
     unsplahApi
@@ -40,35 +41,38 @@ export const Home = () => {
           response.map(item => {
             return {
               id: item.id,
-              preview_photos: item.preview_photos,
               title: item.title
             };
           })
         );
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        if (!ref.current) {
+          return;
+        }
         setError(true);
       });
 
     return () => {
       unsplahApi.abort();
-    }
+    };
   }, []);
 
   return (
-    <Layout>
-      {collections.map(item => (
-        <SectionWrapper key={item.id}>
-          <Title>
-            <Link to={`/section/${item.id}`}>{item.title}</Link>
-          </Title>
-          <Container>
-            <SectionItemPhotos id={item.id} orderBy='latest' />
-          </Container>
-        </SectionWrapper>
-      ))}
-      {error && <Container>Wystąpił błąd</Container>}
-    </Layout>
+    <div ref={ref}>
+      <Layout>
+        {collections.map(item => (
+          <SectionWrapper key={item.id}>
+            <Title>
+              <Link to={`/section/${item.id}`}>{item.title}</Link>
+            </Title>
+            <Container>
+              <SectionItemPhotos id={item.id} orderBy='latest' />
+            </Container>
+          </SectionWrapper>
+        ))}
+        {error && <Container>Wystąpił błąd</Container>}
+      </Layout>
+    </div>
   );
 };

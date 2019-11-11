@@ -3,6 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import LazyImage from './lazy-image';
 import { useUnsplashApi } from '../hooks/use-unsplash-api';
+import { Urls } from '../providers/unsplash-provider';
 
 const BorderImageWrapper = styled.div`
   padding: 5px;
@@ -35,9 +36,7 @@ const Wrapper = styled.div`
 `;
 
 interface ItemProps {
-  urls: {
-    small: string;
-  };
+  urls: Urls;
 }
 
 const Item = memo<ItemProps>(({ urls }) => (

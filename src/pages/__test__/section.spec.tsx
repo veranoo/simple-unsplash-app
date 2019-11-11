@@ -14,7 +14,7 @@ test('should render Section page when success', async () => {
     getCollectionPhotos: () => Promise.resolve(photos)
   };
   const MockProvider = ({ children }) => (
-    <UnsplashContext.Provider value={mock}>{children}</UnsplashContext.Provider>
+    <UnsplashContext.Provider value={mock as any}>{children}</UnsplashContext.Provider>
   );
 
   jest.spyOn(mock, 'getCollectionPhotos').mockImplementationOnce(() => {

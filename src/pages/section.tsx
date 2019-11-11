@@ -81,8 +81,8 @@ export const Section: React.FC<RouteComponentProps<{ id: string }>> = props => {
         params.current.perPage,
         params.current.orderBy
       )
-      .then(response => {
-        dispatch({ type: SET_PHOTOS, payload: { photos: response } });
+      .then(photos => {
+        dispatch({ type: SET_PHOTOS, payload: { photos } });
       })
       .catch(() => {
         if (!ref.current) {
@@ -97,7 +97,7 @@ export const Section: React.FC<RouteComponentProps<{ id: string }>> = props => {
 
     return () => {
       unsplashApi.abort();
-    }
+    };
   }, []);
 
   const loadMore = useCallback(() => {
@@ -110,13 +110,13 @@ export const Section: React.FC<RouteComponentProps<{ id: string }>> = props => {
         params.current.perPage,
         params.current.orderBy
       )
-      .then(response => {
-        if (!response.length) {
+      .then(photos => {
+        if (!photos.length) {
           dispatch({ type: SET_NOT_LOAD_MORE });
           return;
         }
 
-        dispatch({ type: SET_LOAD_MORE, payload: { photos: response } });
+        dispatch({ type: SET_LOAD_MORE, payload: { photos } });
       })
       .catch(() => {
         if (!ref.current) {

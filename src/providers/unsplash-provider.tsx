@@ -1,16 +1,37 @@
 import React, { useMemo } from 'react';
 import Unsplash from 'unsplash-js';
 
+interface Collection {
+  id: string;
+  title: string;
+}
+
+interface Photo {
+  downloads: string;
+  location: {
+    city: string;
+  };
+}
+
+export interface Urls {
+  small: string
+}
+
+interface PhotoCollection {
+  id: string;
+  urls: Urls
+}
+
 interface UnsplashProviderInterface {
-  listCollections(): Promise<any[]>;
-  getPhoto(photoId: string): Promise<any>;
+  listCollections(): Promise<Collection[]>;
+  getPhoto(photoId: string): Promise<Photo>;
   abort(): void;
   getCollectionPhotos(
     collectionId: number,
     page: number,
     perPage: number,
     orderBy: string
-  ): Promise<any>;
+  ): Promise<PhotoCollection[]>;
 }
 
 export const UnsplashContext = React.createContext<UnsplashProviderInterface>(
