@@ -7,7 +7,7 @@ const Description = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
   color: #fff;
   align-items: center;
   justify-content: center;

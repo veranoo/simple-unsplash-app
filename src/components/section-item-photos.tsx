@@ -13,7 +13,7 @@ const BorderImageWrapper = styled.div`
 const ImageWrapper = styled.div`
   flex-grow: 0;
   flex-shrink: 0;
-  flex-basis: 8%;
+  flex-basis: 19%;
   box-sizing: border-box;
   margin: 10px 0;
 `;
@@ -22,7 +22,6 @@ const PhotosWrapper = styled.div`
   display: flex;
   overflow: auto;
   flex-wrap: wrap;
-  align-items: center;
   justify-content: space-between;
 `;
 

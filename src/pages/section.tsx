@@ -23,7 +23,7 @@ const ImagesWrapper = styled.div`
 `;
 
 const ImageWrapper = styled.div`
-  width: 22%;
+  width: 19%;
   margin: 10px 0;
   position: relative;
 `;
