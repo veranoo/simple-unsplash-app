@@ -7,6 +7,12 @@ Simple app with unsplash api
 
 ## Running Locally
 
+``
+cp .env.example .env
+``
+
+Enter your ACCESS_KEY on the .env file
+
 ```sh
 npm install / yarn 
 npm run dev
